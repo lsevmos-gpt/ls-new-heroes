@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
 Sitemap: https://ls-promo.ru/sitemap.xml
+# Source repository: lsevmos-gpt/ls-new-heroes
