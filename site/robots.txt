@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ls-promo.ru/sitemap.xml

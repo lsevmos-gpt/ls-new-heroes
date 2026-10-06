@@ -1,0 +1,11 @@
+{
+  "name": "Линия спорта — Героев Сталинграда, 6 д",
+  "short_name": "Линия спорта",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050706",
+  "theme_color": "#0A1E1E",
+  "icons": [
+    {"src":"/assets/images/brand/favicon.png","sizes":"512x512","type":"image/png"}
+  ]
+}

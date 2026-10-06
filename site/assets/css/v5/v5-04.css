@@ -1,0 +1,249 @@
+
+
+/* =========================================================
+   V3 — cinematic typography + smoother/shorter intro
+   ========================================================= */
+body{
+  font-family:"Manrope",Inter,Arial,Helvetica,sans-serif;
+}
+h1,h2,h3,.scale-number,.intro-scale strong,.price strong,.access-stats strong{
+  font-family:"Oswald","Arial Narrow",Arial,sans-serif;
+  font-weight:600;
+}
+.scroll-progress{opacity:0;transition:opacity .45s ease}
+.scroll-progress.visible{opacity:1}
+
+/* 900vh made the storyboard feel heavy. 520vh keeps every beat,
+   but a small wheel/touch movement now produces visible progress. */
+.intro-track{height:520vh}
+.intro-media{transition:opacity .14s linear}
+.intro-media img{
+  transform:scale(calc(1.025 + var(--intro-camera)*.012));
+  transition:filter .35s ease;
+}
+.intro-vignette{
+  background:
+    radial-gradient(circle at 62% 62%,rgba(31,130,46,.055),transparent 30%),
+    linear-gradient(90deg,rgba(0,0,0,.78) 0%,rgba(0,0,0,.25) 58%,rgba(0,0,0,.10) 100%),
+    linear-gradient(180deg,rgba(0,0,0,.20),transparent 48%,rgba(0,0,0,.34));
+}
+.intro-step{
+  left:clamp(42px,6vw,112px);
+  width:min(780px,70vw);
+  --step-alpha:0;
+  opacity:var(--step-alpha);
+  transform:translateY(-50%) translateY(calc((1 - var(--step-alpha))*24px)) scale(calc(.985 + var(--step-alpha)*.015));
+  filter:blur(calc((1 - var(--step-alpha))*9px));
+  will-change:opacity,transform,filter;
+}
+.intro-step h1,.intro-step h2{
+  font-family:"Oswald","Arial Narrow",Arial,sans-serif;
+  font-size:clamp(54px,6.1vw,110px);
+  line-height:.96;
+  letter-spacing:-.018em;
+  font-weight:600;
+  text-wrap:balance;
+}
+.intro-step--1{--step-alpha:var(--intro-s1)}
+.intro-step--2{--step-alpha:var(--intro-s2)}
+.intro-step--3{--step-alpha:var(--intro-s3)}
+.intro-step--4{--step-alpha:var(--intro-s4)}
+.intro-step--5{--step-alpha:var(--intro-s5)}
+.intro-step--6{--step-alpha:var(--intro-s6)}
+.intro-step--7{--step-alpha:var(--intro-s7)}
+.intro-step--8{--step-alpha:var(--intro-s8)}
+.intro-step>p{
+  margin-top:26px;
+  font-family:"Manrope",Arial,sans-serif;
+  font-size:clamp(13px,1.05vw,17px);
+  font-weight:500;
+  line-height:1.5;
+  letter-spacing:.13em;
+}
+.intro-step--logo{
+  left:50%;top:50%;width:min(700px,58vw);
+  transform:translate(-50%,-50%) translateY(calc((1 - var(--intro-s3))*16px)) scale(calc(.94 + var(--intro-s3)*.06));
+  filter:blur(calc((1 - var(--intro-s3))*12px));
+}
+.intro-step--logo img{filter:drop-shadow(0 0 30px rgba(48,184,82,.13))}
+.intro-scale{gap:clamp(70px,10vw,170px);width:min(980px,82vw)}
+.intro-scale strong{
+  font-family:"Oswald","Arial Narrow",Arial,sans-serif;
+  font-weight:600;
+  font-size:clamp(100px,10.7vw,190px);
+  line-height:.82;
+  letter-spacing:-.025em;
+}
+.intro-scale b{font-family:"Oswald","Arial Narrow",Arial,sans-serif;font-weight:500}
+.intro-scale span{font-family:"Manrope",Arial,sans-serif;font-weight:500;letter-spacing:.16em}
+.intro-caption{left:clamp(42px,6vw,112px);bottom:clamp(54px,7vh,86px);filter:blur(calc((1 - var(--step-alpha))*6px))}
+.intro-caption p{
+  font-family:"Oswald","Arial Narrow",Arial,sans-serif;
+  font-weight:500;
+  line-height:1.02;
+  letter-spacing:.005em;
+}
+.intro-caption--final p{font-size:clamp(29px,2.7vw,48px);font-weight:500}
+
+/* Make the whole site use the same clean, condensed display language
+   that was approved in the storyboard, without making body copy narrow. */
+.space-copy h3,.zone-index h2,.promo-content h2,.activation h2,.access h2,.final-cta h2{
+  font-family:"Oswald","Arial Narrow",Arial,sans-serif;
+  font-weight:600;
+  letter-spacing:-.018em;
+  line-height:.96;
+}
+.space-copy h3{font-size:clamp(44px,4.6vw,82px)}
+.eyebrow,.desktop-nav,.header-cta,.primary-button{font-family:"Manrope",Arial,sans-serif}
+
+@media(max-width:768px){
+  .intro-track{height:560vh}
+  .intro-step{left:24px;right:24px;width:auto}
+  .intro-step h1,.intro-step h2{font-size:clamp(48px,13.4vw,72px);line-height:.98;letter-spacing:-.012em}
+  .intro-step--logo{left:50%;right:auto;width:min(82vw,470px)}
+  .intro-step--4>p{font-size:11px;letter-spacing:.1em}
+  .intro-scale{width:auto}
+  .intro-scale strong{font-size:clamp(96px,30vw,136px)}
+  .intro-caption{left:24px;right:24px;bottom:58px}
+  .intro-caption p{font-size:20px}
+  .intro-caption--final p{font-size:29px}
+}
+
+
+/* =========================================================
+   V4 — reliable typography (no dependency on remote fonts)
+   ========================================================= */
+:root{
+  --font-ui:"Segoe UI","Manrope","Helvetica Neue",Arial,sans-serif;
+  --font-display:"Bahnschrift SemiCondensed","Bahnschrift Condensed","Bahnschrift","Arial Narrow","Aptos Narrow","DejaVu Sans Condensed",Arial,sans-serif;
+}
+body{
+  font-family:var(--font-ui);
+}
+h1,h2,h3,.scale-number,.intro-scale strong,.price strong,.access-stats strong,
+.intro-step h1,.intro-step h2,.intro-caption p,
+.space-copy h3,.zone-index h2,.promo-content h2,.activation h2,.access h2,.final-cta h2{
+  font-family:var(--font-display);
+  font-stretch:condensed;
+}
+.intro-step h1,.intro-step h2{
+  font-weight:600;
+  font-size:clamp(50px,5.35vw,96px);
+  line-height:.91;
+  letter-spacing:-.035em;
+  max-width:980px;
+}
+.intro-step--4 h2{font-size:clamp(47px,5.0vw,90px)}
+.intro-step--4 h2 span{color:var(--green-bright)}
+.intro-step>p{
+  font-family:var(--font-ui);
+  letter-spacing:.105em;
+  font-weight:500;
+}
+.intro-scale strong{
+  font-weight:600;
+  letter-spacing:-.045em;
+}
+.intro-scale b{
+  font-family:var(--font-display);
+  font-weight:500;
+}
+.intro-scale span{
+  font-family:var(--font-ui);
+}
+.space-copy h3,.zone-index h2,.promo-content h2,.activation h2,.access h2,.final-cta h2{
+  font-weight:600;
+  letter-spacing:-.032em;
+  line-height:.94;
+}
+.space-copy h3{font-size:clamp(40px,4.15vw,74px)}
+.eyebrow,.desktop-nav,.header-cta,.primary-button,.mobile-menu,.price-label{
+  font-family:var(--font-ui);
+}
+@media(max-width:768px){
+  .intro-step h1,.intro-step h2{
+    font-size:clamp(44px,11.7vw,66px);
+    line-height:.92;
+    letter-spacing:-.03em;
+  }
+  .intro-step--4 h2{font-size:clamp(42px,11vw,62px)}
+  .intro-caption p{font-size:18px;line-height:1.05;letter-spacing:-.01em}
+  .intro-caption--final p{font-size:26px}
+  .space-copy h3{font-size:clamp(38px,10.8vw,58px)}
+}
+
+/* =========================================================
+   V5 — reference typography + calmer composition
+   Reference: clean premium grotesk, left-aligned, lots of air
+   ========================================================= */
+:root{
+  --font-main:"Manrope","Inter","SF Pro Display","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --intro-left:clamp(44px,6.2vw,118px);
+  --green-v5:#30B852;
+}
+
+html,body{font-family:var(--font-main)}
+body{font-weight:400;letter-spacing:0}
+
+/* Remove condensed display language everywhere. */
+h1,h2,h3,
+.intro-step h1,.intro-step h2,.intro-caption p,.intro-scale strong,.intro-scale b,
+.space-copy h3,.zone-index h2,.promo-content h2,.activation h2,.access h2,.final-cta h2,
+.price strong,.access-stats strong,.buy-content h2,.method h3{
+  font-family:var(--font-main)!important;
+  font-stretch:normal!important;
+  font-style:normal;
+}
+
+/* Shorter intro: a small scroll produces a visible scene change. */
+.intro-track{height:365vh!important;background:#010202}
+.intro-stage{background:#010202}
+.intro-media{transition:opacity .18s linear}
+.intro-media img{
+  transform:scale(calc(1.018 + var(--intro-camera)*.008))!important;
+  transition:filter .35s ease;
+}
+.intro-vignette{
+  background:
+    radial-gradient(circle at 64% 66%,rgba(48,184,82,.045),transparent 28%),
+    linear-gradient(90deg,rgba(0,0,0,.77) 0%,rgba(0,0,0,.28) 54%,rgba(0,0,0,.09) 100%),
+    linear-gradient(180deg,rgba(0,0,0,.12),transparent 52%,rgba(0,0,0,.32));
+}
+
+/* Main reference layout: same anchor on every textual intro frame. */
+.intro-step{
+  left:var(--intro-left)!important;
+  right:auto!important;
+  top:44%!important;
+  width:min(650px,48vw)!important;
+  max-width:none!important;
+  --step-alpha:0;
+  opacity:var(--step-alpha)!important;
+  transform:translateY(-50%) translateY(calc((1 - var(--step-alpha))*16px))!important;
+  filter:blur(calc((1 - var(--step-alpha))*6px))!important;
+  will-change:opacity,transform,filter;
+}
+.intro-step--1{--step-alpha:var(--intro-s1)}
+.intro-step--2{--step-alpha:var(--intro-s2)}
+.intro-step--3{--step-alpha:var(--intro-s3)}
+.intro-step--4{--step-alpha:var(--intro-s4)}
+.intro-step--5{--step-alpha:var(--intro-s5)}
+.intro-step--6{--step-alpha:var(--intro-s6)}
+.intro-step--7{--step-alpha:var(--intro-s7)}
+.intro-step--8{--step-alpha:var(--intro-s8)}
+
+.intro-step h1,.intro-step h2{
+  margin:0!important;
+  max-width:640px!important;
+  font-family:var(--font-main)!important;
+  font-size:clamp(48px,4.05vw,72px)!important;
+  font-weight:600!important;
+  line-height:.96!important;
+  letter-spacing:-.035em!important;
+  text-wrap:balance;
+  text-transform:uppercase;
+  color:#f4f5f4;
+}
+.intro-step h2 span{color:var(--green-v5)}
+
+/* V5.3 deploy integrity marker; layout unchanged. */

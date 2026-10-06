@@ -1,0 +1,198 @@
+/* Autoplay-only intro: manual page scrolling is disabled until the prologue ends. */
+html.intro-autoplay-lock,
+html.intro-autoplay-lock body,
+body.intro-autoplay-lock{
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+}
+body.intro-autoplay-lock{
+  touch-action:none!important;
+}
+.intro-autoplay-lock .scroll-hint{
+  display:none!important;
+}
+
+/* V7.4 — cinematic motion inside the same 11.2 s timeline.
+   Full-screen frames cross-dissolve in JS; these transforms add a very small
+   optical push so the sequence feels like edited video rather than slides. */
+.intro-stage{
+  background:#020302!important;
+}
+.intro-media img{
+  will-change:transform;
+  transform-origin:50% 48%!important;
+  backface-visibility:hidden;
+}
+.intro-media--01 img{transform:scale(calc(1.034 - var(--intro-f1)*.014))!important}
+.intro-media--02 img{transform:scale(calc(1.034 - var(--intro-f2)*.014))!important}
+.intro-media--04 img{transform:scale(calc(1.034 - var(--intro-f4)*.014))!important}
+.intro-media--05 img{transform:scale(calc(1.034 - var(--intro-f5)*.014))!important}
+.intro-media--06 img{transform:scale(calc(1.034 - var(--intro-f6)*.014))!important}
+.intro-media--07 img{transform:scale(calc(1.034 - var(--intro-f7)*.014))!important}
+
+/* Copy now eases in/out like titles in a film: tiny vertical drift, very mild
+   focus pull and almost imperceptible scale. Opacity remains driven by JS. */
+.intro-step:not(.intro-step--logo):not(.intro-quiet){
+  transform:translateY(-50%) translateY(calc((1 - var(--step-alpha))*12px)) scale(calc(.988 + var(--step-alpha)*.012))!important;
+  filter:blur(calc((1 - var(--step-alpha))*5px))!important;
+  will-change:opacity,transform,filter;
+}
+.intro-quiet{
+  transform:translateY(calc((1 - var(--step-alpha))*8px)) scale(calc(.992 + var(--step-alpha)*.008))!important;
+  filter:blur(calc((1 - var(--step-alpha))*3px))!important;
+  will-change:opacity,transform,filter;
+}
+
+/* Restored hall screen after the prologue. It uses the exact final intro frame,
+   so removing the old 320vh track is visually seamless. */
+.club-showcase{
+  position:relative;
+  width:100%;
+  height:100vh;
+  min-height:100vh;
+  overflow:hidden;
+  background:#020403;
+}
+@supports(height:100dvh){
+  .club-showcase{
+    height:100dvh;
+    min-height:100dvh;
+  }
+}
+.club-showcase picture,
+.club-showcase img{
+  display:block;
+  width:100%;
+  height:100%;
+}
+.club-showcase img{
+  object-fit:cover;
+  object-position:center center;
+}
+
+/* Commercial CTAs land on the actionable copy, not on the decorative image. */
+.buy-content#purchase{
+  scroll-margin-top:clamp(84px,8vw,120px);
+}
+
+@media(max-width:768px){
+  /* Keep the cinematic title motion lightweight on mobile GPUs. */
+  .intro-step:not(.intro-step--logo):not(.intro-quiet){
+    transform:translateY(-50%) translateY(calc((1 - var(--step-alpha))*8px)) scale(calc(.994 + var(--step-alpha)*.006))!important;
+    filter:blur(calc((1 - var(--step-alpha))*2.4px))!important;
+  }
+  .intro-quiet{
+    transform:translateY(calc((1 - var(--step-alpha))*6px))!important;
+    filter:blur(calc((1 - var(--step-alpha))*1.8px))!important;
+  }
+
+  /* Keep the offer above the fold now that Graphite Start follows the intro directly. */
+  .promo--conversion .promo-media img{
+    object-position:center top!important;
+  }
+  .promo--conversion .promo-shade{
+    background:
+      linear-gradient(180deg,rgba(2,4,3,.08) 0%,rgba(2,4,3,.34) 24%,rgba(2,4,3,.78) 52%,rgba(2,4,3,.97) 66%),
+      linear-gradient(90deg,rgba(2,4,3,.42),rgba(2,4,3,.08))!important;
+  }
+  .promo--conversion .promo-content{
+    width:100%!important;
+    padding:clamp(90px,11svh,125px) 22px 54px!important;
+  }
+
+  /* The longest commercial title must always fit inside the mobile content
+     width. 13vw keeps "ГРАФИТОВЫЙ" fully visible even on narrow phones. */
+  .promo--conversion .promo-content h2{
+    font-size:clamp(46px,13vw,68px)!important;
+  }
+  .zone-index--feature .zone-index__intro h2{
+    font-size:clamp(44px,12.2vw,68px)!important;
+  }
+
+  /* Make the app/card visual genuinely compact on mobile instead of only
+     lowering its minimum height. This prevents the grid from stretching it. */
+  .buy-visual{
+    height:48svh!important;
+    min-height:48svh!important;
+    max-height:48svh!important;
+  }
+  .buy-visual picture,
+  .buy-visual img{
+    display:block!important;
+    width:100%!important;
+    height:100%!important;
+  }
+  .buy-visual img{
+    object-fit:cover!important;
+    object-position:center center!important;
+  }
+  .buy-content#purchase{
+    scroll-margin-top:72px;
+    padding-top:64px!important;
+  }
+
+  /* Lower funnel should follow its content, not reserve viewport-height deserts. */
+  .access{
+    min-height:auto!important;
+    padding:72px 22px 48px!important;
+    gap:38px!important;
+    align-items:start!important;
+  }
+  .access-address{
+    margin-top:24px!important;
+  }
+  .access-contacts{
+    margin-top:18px!important;
+    gap:7px!important;
+  }
+  .access-contacts a{
+    font-size:15px!important;
+  }
+  .access-stats{
+    gap:10px!important;
+  }
+  .final-cta{
+    min-height:auto!important;
+    padding:62px 22px 72px!important;
+    justify-content:flex-start!important;
+  }
+  .final-logo{
+    margin-bottom:30px!important;
+  }
+  .final-cta>p:not(.eyebrow){
+    margin-top:22px!important;
+  }
+  .final-cta .primary-button{
+    margin-top:28px!important;
+  }
+}
+
+/* Yandex Browser on Android may expose/behave like reduced motion while its
+   power-saving mode disables smooth webpage animation. Keep our timer-driven
+   intro visible instead of forcing the final frame immediately. */
+@media(prefers-reduced-motion:reduce){
+  html.is-yandex-android .intro-stage::after{
+    display:block!important;
+  }
+  html.is-yandex-android .intro-media--01{opacity:var(--intro-f1)!important}
+  html.is-yandex-android .intro-media--02{opacity:var(--intro-f2)!important}
+  html.is-yandex-android .intro-media--04{opacity:var(--intro-f4)!important}
+  html.is-yandex-android .intro-media--05{opacity:var(--intro-f5)!important}
+  html.is-yandex-android .intro-media--06{opacity:var(--intro-f6)!important}
+  html.is-yandex-android .intro-media--07{opacity:var(--intro-f7)!important}
+
+  /* Older reduced-motion fallback hid every .intro-step. Yandex Android in
+     power-saving mode still runs our timer-driven storyboard, so explicitly
+     restore the three textual scenes that must participate in that timeline. */
+  html.is-yandex-android .intro-step--1,
+  html.is-yandex-android .intro-step--2,
+  html.is-yandex-android .intro-step--4{
+    display:block!important;
+  }
+  html.is-yandex-android .intro-step--1{opacity:var(--intro-s1)!important}
+  html.is-yandex-android .intro-step--2{opacity:var(--intro-s2)!important}
+  html.is-yandex-android .intro-step--4{opacity:var(--intro-s4)!important}
+  html.is-yandex-android .intro-step--8{
+    opacity:var(--intro-s8)!important;
+  }
+}

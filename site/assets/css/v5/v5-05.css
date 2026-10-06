@@ -1,0 +1,601 @@
+
+.intro-kicker{
+  margin:0 0 18px!important;
+  padding:0!important;
+  font-family:var(--font-main)!important;
+  font-size:clamp(10px,.72vw,12px)!important;
+  font-weight:500!important;
+  line-height:1.2!important;
+  letter-spacing:.055em!important;
+  text-transform:uppercase!important;
+  color:rgba(244,245,244,.64)!important;
+}
+.intro-subtitle{
+  margin:16px 0 0!important;
+  padding:0!important;
+  font-family:var(--font-main)!important;
+  font-size:clamp(12px,.95vw,16px)!important;
+  font-weight:500!important;
+  line-height:1.35!important;
+  letter-spacing:.018em!important;
+  text-transform:uppercase!important;
+  color:rgba(244,245,244,.62)!important;
+}
+
+/* Logo gets its own center composition and a slow, soft fade. */
+.intro-step--logo{
+  left:50%!important;
+  top:50%!important;
+  width:min(430px,37vw)!important;
+  transform:translate(-50%,-50%) translateY(calc((1 - var(--intro-s3))*10px)) scale(calc(.965 + var(--intro-s3)*.035))!important;
+  filter:blur(calc((1 - var(--intro-s3))*8px))!important;
+}
+.intro-step--logo img{
+  width:100%;
+  filter:drop-shadow(0 0 22px rgba(48,184,82,.13))!important;
+}
+
+/* Scale frame: informative, not billboard-sized. */
+.intro-scale{
+  top:47%!important;
+  width:min(920px,70vw)!important;
+  display:flex!important;
+  align-items:flex-end!important;
+  gap:clamp(62px,8vw,140px)!important;
+}
+.intro-scale>div{
+  display:grid!important;
+  grid-template-columns:auto auto!important;
+  align-items:end!important;
+  column-gap:9px!important;
+}
+.intro-scale strong{
+  font-family:var(--font-main)!important;
+  font-size:clamp(72px,6.2vw,112px)!important;
+  font-weight:600!important;
+  line-height:.82!important;
+  letter-spacing:-.045em!important;
+  color:var(--green-v5)!important;
+}
+.intro-scale b{
+  font-family:var(--font-main)!important;
+  font-size:clamp(23px,2vw,36px)!important;
+  font-weight:600!important;
+  line-height:1!important;
+  letter-spacing:-.025em!important;
+  color:var(--green-v5)!important;
+}
+.intro-scale span{
+  grid-column:1/-1!important;
+  margin-top:16px!important;
+  font-family:var(--font-main)!important;
+  font-size:clamp(10px,.74vw,12px)!important;
+  font-weight:500!important;
+  letter-spacing:.08em!important;
+  color:rgba(244,245,244,.68)!important;
+}
+
+/* Final formation frames deliberately stay quiet. */
+.intro-quiet{
+  top:auto!important;
+  bottom:54px!important;
+  transform:translateY(calc((1 - var(--step-alpha))*10px))!important;
+  filter:blur(calc((1 - var(--step-alpha))*4px))!important;
+  width:auto!important;
+}
+.intro-quiet p{
+  margin:0!important;
+  font-family:var(--font-main)!important;
+  font-size:11px!important;
+  font-weight:500!important;
+  line-height:1.2!important;
+  letter-spacing:.08em!important;
+  text-transform:uppercase!important;
+  color:rgba(255,255,255,.62)!important;
+}
+.intro-quiet--final p{color:#fff!important}
+
+.scroll-hint{left:var(--intro-left)!important;font-family:var(--font-main);font-size:9px;letter-spacing:.10em}
+
+/* Typography across the rest of the site: same reference family, calmer scale. */
+.eyebrow{
+  font-family:var(--font-main)!important;
+  font-size:11px!important;
+  font-weight:600!important;
+  letter-spacing:.10em!important;
+}
+.space-copy{max-width:650px}
+.space-copy h3{
+  font-size:clamp(42px,3.7vw,66px)!important;
+  line-height:.97!important;
+  letter-spacing:-.035em!important;
+  font-weight:600!important;
+}
+.space-copy>p:last-child{font-size:clamp(15px,1.05vw,19px);line-height:1.55;max-width:480px}
+.zone-index h2,.activation h2,.access h2,.final-cta h2,.buy-content h2{
+  font-size:clamp(44px,4.2vw,74px)!important;
+  line-height:.98!important;
+  letter-spacing:-.035em!important;
+  font-weight:600!important;
+}
+.promo-content h2{
+  font-size:clamp(64px,5.2vw,92px)!important;
+  line-height:.9!important;
+  letter-spacing:-.045em!important;
+  font-weight:600!important;
+}
+.price strong{font-size:clamp(30px,2.65vw,46px)!important;font-weight:600!important;letter-spacing:-.025em}
+.method h3{font-weight:600!important;letter-spacing:-.02em}
+.primary-button,.header-cta,.desktop-nav,.mobile-menu,.text-link,.site-footer{
+  font-family:var(--font-main)!important;
+}
+
+/* More breathing room around section copy. */
+.space-copy{padding-bottom:clamp(72px,8vh,112px)!important}
+.zone-index,.activation,.access,.final-cta{padding-top:clamp(120px,12vw,190px);padding-bottom:clamp(120px,12vw,190px)}
+
+@media(max-width:768px){
+  .intro-track{height:320vh!important}
+
+  /* Yandex/Chromium mobile UI changes the visible viewport height while scrolling.
+     svh leaves a visible black gap; use the live dynamic viewport instead. */
+  .intro-stage{
+    height:100vh!important;
+    min-height:100vh!important;
+    height:100dvh!important;
+    min-height:100dvh!important;
+  }
+  .scene,.space-scene,.zone-index{
+    min-height:100vh!important;
+    min-height:100dvh!important;
+  }
+
+  .intro-step{
+    left:24px!important;
+    right:24px!important;
+    top:43%!important;
+    width:auto!important;
+    filter:none!important;
+  }
+  .intro-step h1,.intro-step h2{
+    max-width:360px!important;
+    font-size:clamp(38px,10.6vw,52px)!important;
+    line-height:.98!important;
+    letter-spacing:-.032em!important;
+  }
+  .intro-kicker{font-size:9px!important;margin-bottom:14px!important;letter-spacing:.045em!important}
+  .intro-subtitle{font-size:10px!important;margin-top:13px!important;line-height:1.45!important;max-width:300px}
+  .intro-step--logo{
+    left:50%!important;
+    right:auto!important;
+    width:min(78vw,340px)!important;
+    filter:none!important;
+  }
+  .intro-scale{
+    top:46%!important;
+    left:24px!important;
+    right:24px!important;
+    width:auto!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:34px!important;
+  }
+  .intro-scale>div{justify-content:start!important}
+  .intro-scale strong{font-size:clamp(62px,18vw,86px)!important}
+  .intro-scale b{font-size:22px!important}
+  .intro-scale span{font-size:8px!important;margin-top:10px!important}
+  .intro-quiet{top:auto!important;bottom:54px!important;filter:none!important}
+  .intro-quiet p{font-size:9px!important}
+  .scroll-hint{left:24px!important}
+  .space-copy h3{font-size:clamp(36px,10vw,50px)!important}
+  .zone-index{
+    grid-template-columns:minmax(0,1fr)!important;
+    max-width:100%;
+    overflow:hidden;
+  }
+  .zone-index__intro,.zone-list{
+    min-width:0;
+    max-width:100%;
+  }
+  .zone-index h2{
+    overflow-wrap:anywhere;
+    word-break:normal;
+  }
+  .zone-index h2,.activation h2,.access h2,.final-cta h2,.buy-content h2{font-size:clamp(36px,10vw,50px)!important}
+  .promo-content h2{font-size:clamp(48px,13vw,64px)!important}
+}
+
+/* V5.3 — reliability and keyboard accessibility fixes. */
+a:focus-visible,button:focus-visible,summary:focus-visible{
+  outline:2px solid var(--green-bright);
+  outline-offset:4px;
+}
+@media(min-width:981px){
+  body.menu-open{overflow:auto}
+}
+@media(prefers-reduced-motion:reduce){
+  .intro-step--8{
+    display:block!important;
+    opacity:1!important;
+    transform:none!important;
+    filter:none!important;
+  }
+}
+
+/* =========================================================
+   INTRO V7 — 7 supplied image frames, strict order 01 → 07.
+   Frame 04 already contains the Line of Sport logo.
+   ========================================================= */
+:root{
+  --intro-f1:1;
+  --intro-f2:0;
+  --intro-f3:0;
+  --intro-f4:0;
+  --intro-f5:0;
+  --intro-f6:0;
+  --intro-f7:0;
+}
+.intro-media--01{opacity:var(--intro-f1)!important}
+.intro-media--02{opacity:var(--intro-f2)!important}
+.intro-media--03{opacity:var(--intro-f3)!important}
+.intro-media--04{opacity:var(--intro-f4)!important}
+.intro-media--05{opacity:var(--intro-f5)!important}
+.intro-media--06{opacity:var(--intro-f6)!important}
+.intro-media--07{opacity:var(--intro-f7)!important}
+
+/* The logo is baked into supplied frame 04; never render a second logo over it. */
+.intro-step--3{display:none!important}
+
+@media(prefers-reduced-motion:reduce){
+  .intro-media--01,.intro-media--02,.intro-media--03,.intro-media--04,.intro-media--05,.intro-media--06{opacity:0!important}
+  .intro-media--07{opacity:1!important}
+}
+
+
+/* =========================================================
+   INTRO V7.1 — calm synchronized reading rhythm
+   ========================================================= */
+/* Text should not "fly" or blur while the background changes. The opacity
+   curve in JS already provides a 0.37 s crossfade on a 12.4 s mobile intro. */
+.intro-step:not(.intro-quiet):not(.intro-step--logo){
+  filter:none!important;
+  transform:translateY(-50%)!important;
+}
+.intro-quiet{filter:none!important}
+
+/* Removed micro-scenes must never flash if an old HTML copy is briefly cached. */
+.intro-step--6,.intro-step--7{display:none!important}
+
+
+/* =========================================================
+   INTRO V7.2 — cinematic fades, frame 03 removed
+   ========================================================= */
+:root{
+  --intro-blackout:0;
+}
+.intro-stage::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:3;
+  pointer-events:none;
+  background:#000;
+  opacity:var(--intro-blackout);
+  will-change:opacity;
+}
+.intro-media{
+  transition:none!important;
+  will-change:opacity,transform;
+}
+.intro-media--03{display:none!important}
+
+/* Restore the soft text appearance/disappearance used in the earlier intro. */
+.intro-step:not(.intro-step--logo):not(.intro-quiet){
+  transform:translateY(-50%) translateY(calc((1 - var(--step-alpha))*8px))!important;
+  filter:blur(calc((1 - var(--step-alpha))*4px))!important;
+}
+.intro-quiet{
+  transform:translateY(calc((1 - var(--step-alpha))*6px))!important;
+  filter:blur(calc((1 - var(--step-alpha))*3px))!important;
+}
+
+/* Only the six active supplied frames participate in the storyboard. */
+.intro-media--01{opacity:var(--intro-f1)!important}
+.intro-media--02{opacity:var(--intro-f2)!important}
+.intro-media--04{opacity:var(--intro-f4)!important}
+.intro-media--05{opacity:var(--intro-f5)!important}
+.intro-media--06{opacity:var(--intro-f6)!important}
+.intro-media--07{opacity:var(--intro-f7)!important}
+
+@media(prefers-reduced-motion:reduce){
+  .intro-stage::after{display:none!important}
+  .intro-media--01,.intro-media--02,.intro-media--04,.intro-media--05,.intro-media--06{opacity:0!important}
+  .intro-media--07{opacity:1!important}
+}
+
+
+/* =========================================================
+   V6.0 — QR conversion structure: zones → promo → buy
+   ========================================================= */
+
+/* The individual photo zone gallery is intentionally removed from markup.
+   The new competitive-advantage block presents all club zones at once. */
+.zone-index--feature{
+  min-height:auto!important;
+  display:grid!important;
+  grid-template-columns:minmax(320px,.82fr) minmax(0,1.18fr)!important;
+  gap:clamp(58px,7vw,120px)!important;
+  align-items:start!important;
+  padding-top:clamp(110px,10vw,170px)!important;
+  padding-bottom:clamp(110px,10vw,170px)!important;
+  background:
+    radial-gradient(circle at 12% 22%,rgba(48,184,82,.10),transparent 25%),
+    linear-gradient(180deg,#050706 0%,#070b09 52%,#050706 100%);
+  border-top:1px solid rgba(218,255,218,.13)!important;
+  border-bottom:1px solid rgba(218,255,218,.13)!important;
+}
+.zone-index--feature::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.18;
+  background-image:
+    linear-gradient(rgba(218,255,218,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(218,255,218,.025) 1px,transparent 1px);
+  background-size:72px 72px;
+  mask-image:linear-gradient(90deg,#000,transparent 72%);
+}
+.zone-index--feature .zone-index__intro{
+  position:sticky;
+  top:calc(var(--header-h) + 46px);
+  align-self:start;
+  min-width:0;
+  z-index:1;
+}
+.zone-index--feature h2{
+  font-size:clamp(54px,5.9vw,104px)!important;
+  line-height:.91!important;
+  letter-spacing:-.052em!important;
+  max-width:760px;
+}
+.zone-index__lead{
+  max-width:560px;
+  margin:32px 0 0;
+  color:#aeb8b2;
+  font-size:clamp(16px,1.35vw,21px);
+  line-height:1.55;
+}
+.zone-index__facts{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  margin-top:42px;
+}
+.zone-index__facts>div{
+  min-width:0;
+  padding:18px 14px 16px;
+  border:1px solid rgba(218,255,218,.12);
+  background:rgba(8,16,12,.48);
+}
+.zone-index__facts strong{
+  display:block;
+  color:var(--green-bright);
+  font-size:clamp(26px,2.5vw,42px);
+  line-height:1;
+  letter-spacing:-.04em;
+}
+.zone-index__facts span{
+  display:block;
+  margin-top:8px;
+  color:#8e9992;
+  font-size:9px;
+  line-height:1.35;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.zone-grid{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  border-top:1px solid rgba(218,255,218,.16);
+  border-left:1px solid rgba(218,255,218,.16);
+}
+.zone-card{
+  min-height:190px;
+  display:grid;
+  grid-template-columns:42px minmax(0,1fr);
+  gap:18px;
+  align-content:start;
+  padding:28px 24px 26px;
+  border-right:1px solid rgba(218,255,218,.16);
+  border-bottom:1px solid rgba(218,255,218,.16);
+  background:rgba(5,10,8,.26);
+  transition:background .28s ease,transform .28s var(--ease);
+}
+.zone-card:hover{
+  background:rgba(48,184,82,.055);
+}
+.zone-card__number{
+  padding-top:4px;
+  color:var(--green-bright);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.12em;
+}
+.zone-card h3{
+  margin:0;
+  font-size:clamp(17px,1.35vw,23px);
+  line-height:1.04;
+  letter-spacing:-.025em;
+}
+.zone-card p{
+  max-width:360px;
+  margin:14px 0 0;
+  color:#8f9a94;
+  font-size:13px;
+  line-height:1.5;
+}
+
+/* Promo is now the immediate conversion block after the competitive overview. */
+.promo--conversion{
+  min-height:100svh!important;
+}
+.promo--conversion .promo-content{
+  width:min(790px,62vw)!important;
+  padding-top:clamp(105px,9vw,145px)!important;
+  padding-bottom:clamp(95px,8vw,130px)!important;
+}
+.promo--conversion .promo-lead{
+  max-width:610px;
+}
+.promo-activation{
+  margin-top:30px;
+  padding:24px 24px 22px;
+  border:1px solid rgba(218,255,218,.16);
+  border-left:2px solid var(--green-bright);
+  background:rgba(3,8,5,.66);
+  backdrop-filter:blur(12px);
+}
+.promo-activation__eyebrow{
+  margin:0 0 10px!important;
+  color:var(--green-bright)!important;
+  font-size:10px!important;
+  font-weight:700!important;
+  letter-spacing:.15em!important;
+  text-transform:uppercase!important;
+}
+.promo-activation h3{
+  max-width:650px;
+  margin:0;
+  font-size:clamp(20px,2vw,30px);
+  line-height:1.05;
+  letter-spacing:-.03em;
+}
+.promo-activation>p:not(.promo-activation__eyebrow){
+  max-width:650px;
+  margin:14px 0 0;
+  color:#c2cbc5;
+  font-size:14px;
+  line-height:1.5;
+}
+.promo-activation small{
+  display:block;
+  max-width:650px;
+  margin-top:10px;
+  color:#78847d;
+  font-size:10px;
+  line-height:1.45;
+}
+.promo--conversion .primary-button{
+  margin-top:28px;
+}
+
+/* The old standalone activation section is removed from markup. */
+.activation{display:none!important}
+
+@media(max-width:980px){
+  .zone-index--feature{
+    grid-template-columns:1fr!important;
+    gap:58px!important;
+  }
+  .zone-index--feature .zone-index__intro{
+    position:relative;
+    top:auto;
+  }
+  .zone-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .promo--conversion .promo-content{
+    width:min(780px,82vw)!important;
+  }
+}
+
+@media(max-width:768px){
+  .zone-index--feature{
+    min-height:auto!important;
+    padding:92px 22px 96px!important;
+    gap:44px!important;
+    overflow:hidden;
+  }
+  .zone-index--feature::before{
+    background-size:46px 46px;
+  }
+  .zone-index--feature h2{
+    font-size:clamp(43px,12.1vw,61px)!important;
+    line-height:.94!important;
+    overflow-wrap:normal!important;
+  }
+  .zone-index__lead{
+    margin-top:24px;
+    font-size:15px;
+    line-height:1.5;
+  }
+  .zone-index__facts{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:6px;
+    margin-top:30px;
+  }
+  .zone-index__facts>div{
+    padding:14px 9px 12px;
+  }
+  .zone-index__facts strong{
+    font-size:clamp(25px,8vw,35px);
+  }
+  .zone-index__facts span{
+    font-size:7px;
+    letter-spacing:.035em;
+  }
+  .zone-grid{
+    grid-template-columns:1fr;
+  }
+  .zone-card{
+    min-height:0;
+    grid-template-columns:34px minmax(0,1fr);
+    gap:12px;
+    padding:20px 16px 19px;
+  }
+  .zone-card h3{
+    font-size:18px;
+  }
+  .zone-card p{
+    margin-top:9px;
+    font-size:12px;
+  }
+
+  .promo--conversion{
+    min-height:auto!important;
+    align-items:flex-end;
+  }
+  .promo--conversion .promo-media{
+    position:absolute;
+    inset:0;
+  }
+  .promo--conversion .promo-shade{
+    background:
+      linear-gradient(180deg,rgba(2,4,3,.16) 0%,rgba(2,4,3,.45) 34%,rgba(2,4,3,.97) 64%),
+      linear-gradient(90deg,rgba(2,4,3,.48),rgba(2,4,3,.1));
+  }
+  .promo--conversion .promo-content{
+    width:100%!important;
+    padding:68svh 22px 60px!important;
+  }
+  .promo--conversion .promo-content h2{
+    font-size:clamp(54px,15vw,72px)!important;
+  }
+  .promo--conversion .prices{
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .promo-activation{
+    margin-top:24px;
+    padding:19px 16px 17px;
+  }
+  .promo-activation h3{
+    font-size:20px;
+  }
+  .promo-activation>p:not(.promo-activation__eyebrow){
+    font-size:13px;
+  }
+}
