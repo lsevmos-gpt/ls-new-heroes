@@ -1,0 +1,175 @@
+name: Deploy ls-new-heroes to REG.RU
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'site/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ls-new-heroes-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed site files
+        id: changes
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "full=true" >> "$GITHUB_OUTPUT"
+            echo "Manual run: full site synchronization."
+            exit 0
+          fi
+
+          BEFORE="${{ github.event.before }}"
+          AFTER="${{ github.sha }}"
+
+          git diff --name-only --diff-filter=ACMR "$BEFORE" "$AFTER" -- site/             | sed 's#^site/##'             | sed '/^$/d' > changed-files.txt
+
+          echo "full=false" >> "$GITHUB_OUTPUT"
+          echo "Changed files:"
+          cat changed-files.txt || true
+
+      - name: Install deployment tools
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg lftp
+
+      - name: Rebuild and verify intro soundtrack
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          cat             site/assets/audio/formation-final-00.txt             site/assets/audio/formation-final-01.txt             site/assets/audio/formation-final-02.txt             site/assets/audio/formation-final-03.txt             site/assets/audio/formation-final-04.txt             site/assets/audio/formation-final-05.txt             site/assets/audio/formation-final-06.txt             site/assets/audio/formation-final-07a.txt             site/assets/audio/formation-final-07b.txt             site/assets/audio/formation-final-08.txt             | tr -d '\r\n '             | base64 -d > /tmp/formation-b.m4a
+
+          test "$(wc -c < /tmp/formation-b.m4a | tr -d ' ')" -eq 47173
+          echo "199765c2d85c504cf5e871aa188c60d9f46e92712591ed2b1c5d1d138dd0cc64  /tmp/formation-b.m4a" | sha256sum -c -
+          cmp -s /tmp/formation-b.m4a site/assets/audio/formation-b.m4a
+
+      - name: Check REG.RU credentials
+        env:
+          REG_PASSWORD: ${{ secrets.REG_PASSWORD }}
+        shell: bash
+        run: |
+          if [ -z "$REG_PASSWORD" ]; then
+            echo "::error::Repository secret REG_PASSWORD is not configured."
+            exit 1
+          fi
+
+      - name: Test REG.RU FTPS connection
+        env:
+          REG_PASSWORD: ${{ secrets.REG_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          lftp -u "u3652448_lspromo","$REG_PASSWORD" "ftp://server169.hosting.reg.ru:21" -e "
+            set ftp:ssl-force true;
+            set ftp:ssl-protect-data true;
+            set ftp:passive-mode true;
+            set ssl:verify-certificate no;
+            set net:max-retries 2;
+            set net:timeout 20;
+            cd /;
+            pwd;
+            bye
+          "
+
+      - name: Full site synchronization
+        if: steps.changes.outputs.full == 'true'
+        env:
+          REG_PASSWORD: ${{ secrets.REG_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          lftp -u "u3652448_lspromo","$REG_PASSWORD" "ftp://server169.hosting.reg.ru:21" -e "
+            set ftp:ssl-force true;
+            set ftp:ssl-protect-data true;
+            set ftp:passive-mode true;
+            set ssl:verify-certificate no;
+            set net:max-retries 2;
+            set net:timeout 20;
+            cd /;
+            mirror -R --verbose --exclude-glob .git* --exclude-glob .github* site/ ./;
+            bye
+          "
+
+      - name: Upload changed files only
+        if: steps.changes.outputs.full == 'false'
+        env:
+          REG_PASSWORD: ${{ secrets.REG_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          {
+            echo "set ftp:ssl-force true"
+            echo "set ftp:ssl-protect-data true"
+            echo "set ftp:passive-mode true"
+            echo "set ssl:verify-certificate no"
+            echo "set net:max-retries 2"
+            echo "set net:timeout 20"
+            echo "cd /"
+
+            while IFS= read -r FILE; do
+              [ -z "$FILE" ] && continue
+              REMOTE_DIR=$(dirname "$FILE")
+              if [ "$REMOTE_DIR" != "." ]; then
+                printf 'mkdir -p "%s"\n' "$REMOTE_DIR"
+              fi
+              printf 'put "%s" -o "%s"\n' "site/$FILE" "$FILE"
+            done < changed-files.txt
+
+            echo "bye"
+          } > deploy.lftp
+
+          lftp -u "u3652448_lspromo","$REG_PASSWORD" "ftp://server169.hosting.reg.ru:21" < deploy.lftp
+
+      - name: Verify live production
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          fetch() {
+            local url="$1"
+            local out="$2"
+            for attempt in 1 2 3 4 5 6; do
+              if curl -fsSL --connect-timeout 10 --max-time 45                 -H 'Cache-Control: no-cache'                 -H 'Pragma: no-cache'                 "$url" -o "$out"; then
+                return 0
+              fi
+              sleep 5
+            done
+            return 1
+          }
+
+          fetch "https://ls-promo.ru/?smoke=${GITHUB_SHA}" /tmp/live-index.html
+          cmp -s site/index.html /tmp/live-index.html
+
+          fetch "https://ls-promo.ru/assets/js/app-v5.js?smoke=${GITHUB_SHA}" /tmp/live-app-v5.js
+          cmp -s site/assets/js/app-v5.js /tmp/live-app-v5.js
+
+          fetch "https://ls-promo.ru/assets/js/intro-postlude-v1.js?smoke=${GITHUB_SHA}" /tmp/live-intro-postlude.js
+          cmp -s site/assets/js/intro-postlude-v1.js /tmp/live-intro-postlude.js
+
+          fetch "https://ls-promo.ru/assets/audio/formation-b.m4a?smoke=${GITHUB_SHA}" /tmp/live-formation-b.m4a
+          cmp -s site/assets/audio/formation-b.m4a /tmp/live-formation-b.m4a
+
+          grep -Fq 'Линия спорта' /tmp/live-index.html
+          grep -Fq 'КЛУБ ОТКРЫТ' /tmp/live-index.html
+          grep -Fq 'ГРАФИТОВЫЙ' /tmp/live-index.html
+
+          echo "LIVE DEPLOYMENT MATCHES NEW REPOSITORY"
