@@ -1,0 +1,62 @@
+name: Check ls-promo.ru FTPS (read-only)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/check-ls-promo-ftps.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ls-promo-ru-ftps-readonly
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      FTP_HOST: server169.hosting.reg.ru
+      FTP_USER: u3652448_lspromo
+      FTP_PASSWORD: ${{ secrets.REG_PASSWORD }}
+
+    steps:
+      - name: Validate FTPS secret is configured
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "$FTP_PASSWORD" ]]; then
+            echo '::error::REG_PASSWORD is missing.'
+            exit 1
+          fi
+          if [[ "$FTP_PASSWORD" == *$'\n'* || "$FTP_PASSWORD" == *$'\r'* ]]; then
+            echo '::error::FTP password contains a newline.'
+            exit 1
+          fi
+          echo 'Read-only connection test selected. No remote writes.'
+
+      - name: Install FTPS client
+        run: sudo apt-get update -qq && sudo apt-get install -qq -y lftp
+
+      - name: Check FTPS login and read remote directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          lftp -u "$FTP_USER","$FTP_PASSWORD" "ftp://$FTP_HOST:21" -e "
+            set cmd:fail-exit true;
+            set ftp:ssl-force true;
+            set ftp:ssl-protect-data true;
+            set ftp:passive-mode true;
+            set ssl:verify-certificate no;
+            set net:max-retries 2;
+            set net:timeout 20;
+            cd /;
+            pwd;
+            cls -1;
+            bye
+          "
+          echo 'Existing ls-promo.ru FTPS account authenticated; no remote files changed.'
