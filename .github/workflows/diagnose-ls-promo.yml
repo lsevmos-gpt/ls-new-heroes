@@ -48,3 +48,30 @@ jobs:
             head -c 180 /tmp/promo-response-body | tr '\n' ' '
             echo
           done
+
+      - name: Verify authoritative REG.RU records and bypass DNS to origin
+        shell: bash
+        run: |
+          set +e
+          for server in ns1.reg.ru ns2.reg.ru; do
+            echo "========== AUTHORITY: $server =========="
+            for type in SOA NS A AAAA CNAME; do
+              echo "type=$type"
+              dig @"$server" +time=4 +tries=1 ls-promo.ru "$type" +noall +answer +authority +comments | head -20
+            done
+          done
+          echo "========== BYPASS DNS: origin REG.RU =========="
+          for url in "https://ls-promo.ru/" "http://ls-promo.ru/"; do
+            echo "URL=$url"
+            target_port=443
+            case "$url" in http:*) target_port=80;; esac
+            curl --noproxy '*' -k -sS -L -o /tmp/bypass-body -D /tmp/bypass-head \
+              --resolve "ls-promo.ru:${target_port}:31.31.196.208" \
+              --connect-timeout 8 --max-time 20 --retry 0 \
+              -w 'result: status=%{http_code} ip=%{remote_ip} redirects=%{num_redirects} effective=%{url_effective} duration=%{time_total}\n' "$url"
+            echo "curl_exit=$?"
+            grep -Eai '^(HTTP/|server:|location:|content-type:|retry-after:|x-powered-by:)' /tmp/bypass-head | tail -12
+            echo "snippet:"
+            head -c 150 /tmp/bypass-body | tr '\n' ' '
+            echo
+          done
