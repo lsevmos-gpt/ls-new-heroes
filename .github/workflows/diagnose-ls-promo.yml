@@ -87,3 +87,14 @@ jobs:
             echo "curl_exit=$?"
             echo
           done
+
+      - name: Verify SSL certificate for ls-promo.ru via direct origin IP
+        shell: bash
+        run: |
+          set +e
+          curl --noproxy '*' -sSI \
+            --resolve 'ls-promo.ru:443:31.31.196.208' \
+            --connect-timeout 8 --max-time 15 \
+            -w 'tls_result: http=%{http_code} verify=%{ssl_verify_result}\n' \
+            https://ls-promo.ru/
+          echo "curl_exit=$?"
