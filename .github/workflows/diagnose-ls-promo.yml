@@ -75,3 +75,15 @@ jobs:
             head -c 150 /tmp/bypass-body | tr '\n' ' '
             echo
           done
+
+      - name: Check Cloudflare read-only bridge without modifying REG.RU
+        shell: bash
+        run: |
+          set +e
+          for url in "https://ls-reg-hosting-bridge.ls-evmos.workers.dev/health" "https://ls-reg-hosting-bridge.ls-evmos.workers.dev/probe/ls-promo"; do
+            echo "========== CLOUDFLARE $url =========="
+            curl -sS -L --connect-timeout 8 --max-time 20 \
+              -w '\nHTTP_CODE=%{http_code}\n' "$url"
+            echo "curl_exit=$?"
+            echo
+          done
