@@ -1,0 +1,50 @@
+name: Diagnose ls-promo.ru availability (read-only)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/diagnose-ls-promo.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Check public DNS resolution
+        shell: bash
+        run: |
+          set +e
+          for domain in ls-promo.ru www.ls-promo.ru server169.hosting.reg.ru; do
+            echo "========== DNS: $domain =========="
+            for resolver in 1.1.1.1 8.8.8.8; do
+              echo "resolver=$resolver A:"
+              dig @"$resolver" +time=4 +tries=1 "$domain" A +noall +answer +comments | head -18
+              echo "resolver=$resolver AAAA:"
+              dig @"$resolver" +time=4 +tries=1 "$domain" AAAA +short | head -8
+            done
+          done
+          echo "========== AUTHORITY NS =========="
+          dig @1.1.1.1 +time=4 +tries=1 ls-promo.ru NS +noall +answer +comments
+
+      - name: Compare HTTP and HTTPS status and response headers
+        shell: bash
+        run: |
+          set +e
+          for address in "https://ls-promo.ru/" "http://ls-promo.ru/" "https://www.ls-promo.ru/" "https://liniyasporta.ru/" "https://promo.liniyasporta.ru/"; do
+            echo "========== URL: $address =========="
+            curl --noproxy '*' -sS -L -o /tmp/promo-response-body -D /tmp/promo-response-headers \
+              --connect-timeout 7 --max-time 20 --retry 0 \
+              -w 'result: status=%{http_code} resolved_ip=%{remote_ip} effective_url=%{url_effective} redirects=%{num_redirects} tls_verify=%{ssl_verify_result} duration=%{time_total}\n' \
+              "$address"
+            echo "curl_exit=$?"
+            echo "--- headers ---"
+            grep -Eai '^(HTTP/|server:|location:|content-type:|retry-after:|via:|x-powered-by:|x-cache:)' /tmp/promo-response-headers | tail -14
+            echo "--- response snippet ---"
+            head -c 180 /tmp/promo-response-body | tr '\n' ' '
+            echo
+          done
